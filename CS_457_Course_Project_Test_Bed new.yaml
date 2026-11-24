@@ -1,0 +1,221 @@
+annotations: []
+smart_annotations: []
+nodes:
+  - boot_disk_size: null
+    configuration:
+      - name: node.cfg
+        content: |-
+          #!/bin/bash
+
+          # Client 1 network configuration
+
+          # Bring up the Ethernet interface
+          ip link set eth0 up
+
+          # Clear existing IPv4 configuration
+          ip addr flush dev eth0
+
+          # Request network configuration from R1 via DHCP
+          udhcpc -i eth0 -q
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n0
+    image_definition: null
+    label: client1
+    node_definition: alpine
+    parameters: {}
+    priority: null
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: 520
+    y: -320
+    interfaces:
+      - id: i0
+        label: eth0
+        mac_address: null
+        type: physical
+        slot: 0
+  - boot_disk_size: null
+    configuration:
+      - name: node.cfg
+        content: |-
+          #!/bin/bash
+
+          # Client 2 network configuration
+
+          # Bring up the Ethernet interface
+          ip link set eth0 up
+
+          # Clear existing IPv4 configuration
+          ip addr flush dev eth0
+
+          # Request network configuration from R1 via DHCP
+          udhcpc -i eth0 -q
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n1
+    image_definition: null
+    label: client2
+    node_definition: alpine
+    parameters: {}
+    priority: null
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: 120
+    y: -320
+    interfaces:
+      - id: i0
+        label: eth0
+        mac_address: null
+        type: physical
+        slot: 0
+  - boot_disk_size: null
+    configuration:
+      - name: ios_config.txt
+        content: hostname Router R1
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n2
+    image_definition: null
+    label: Router R1
+    node_definition: iosv
+    parameters: {}
+    priority: null
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: 320
+    y: -320
+    interfaces:
+      - id: i0
+        label: Loopback0
+        mac_address: null
+        type: loopback
+      - id: i1
+        label: GigabitEthernet0/0
+        mac_address: null
+        type: physical
+        slot: 0
+      - id: i2
+        label: GigabitEthernet0/1
+        mac_address: null
+        type: physical
+        slot: 1
+      - id: i3
+        label: GigabitEthernet0/2
+        mac_address: null
+        type: physical
+        slot: 2
+      - id: i4
+        label: GigabitEthernet0/3
+        mac_address: null
+        type: physical
+        slot: 3
+  - boot_disk_size: null
+    configuration: []
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n3
+    image_definition: null
+    label: ext-conn-0
+    node_definition: external_connector
+    parameters: {}
+    priority: null
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: 320
+    y: -160
+    interfaces:
+      - id: i0
+        label: port
+        mac_address: null
+        type: physical
+        slot: 0
+  - boot_disk_size: null
+    configuration: []
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n4
+    image_definition: null
+    label: kf-server
+    node_definition: alpine
+    parameters: {}
+    priority: null
+    pyats:
+      username: null
+      password: null
+      enable_password: null
+    ram: null
+    tags: []
+    x: 320
+    y: -480
+    interfaces:
+      - id: i0
+        label: eth0
+        mac_address: null
+        type: physical
+        slot: 0
+links:
+  - id: l0
+    n1: n3
+    n2: n2
+    i1: i0
+    i2: i1
+    conditioning: {}
+    label: ext-conn-0-port<->Router R1-GigabitEthernet0/0
+  - id: l1
+    n1: n0
+    n2: n2
+    i1: i0
+    i2: i2
+    conditioning: {}
+    label: client1-eth0<->Router R1-GigabitEthernet0/1
+  - id: l2
+    n1: n2
+    n2: n1
+    i1: i3
+    i2: i0
+    conditioning: {}
+    label: Router R1-GigabitEthernet0/2<->client2-eth0
+  - id: l3
+    n1: n4
+    n2: n2
+    i1: i0
+    i2: i4
+    conditioning: {}
+    label: kf-server-eth0<->Router R1-GigabitEthernet0/3
+lab:
+  description: 'A test bed VM for modeling my CS 457 Course Project: Symmetrical Mastermind
+    terminal game'
+  notes: ''
+  title: CS 457 Course Project Test Bed
+  node_staging:
+    enabled: false
+    start_remaining: true
+    abort_on_failure: false
+  version: 0.3.1
